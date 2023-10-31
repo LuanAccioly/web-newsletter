@@ -9,15 +9,84 @@ import {
   InputLeftElement,
   Text,
   VStack,
+  useToast,
 } from '@chakra-ui/react';
 import { AiOutlineMail } from 'react-icons/ai';
+import api from '../services/api';
+import { useEffect, useState } from 'react';
+import UFRPE_LOGO from '../assets/images/ufrpe_logo.png';
 
 export const Newsletter = () => {
-  const UFRPE_LOGO =
-    'https://upload.wikimedia.org/wikipedia/commons/8/83/Bras%C3%A3o_UFRPE.png';
+  const toasts = {
+    erro: {
+      invalidEmail: {
+        title: 'Email inválido',
+        position: 'top-right',
+        status: 'error',
+        isClosable: true,
+      },
+      alreadyExists: {
+        title: 'Email já cadastrado',
+        position: 'top-right',
+        status: 'error',
+        isClosable: true,
+      },
+      error: {
+        title: 'Erro ao cadastrar email',
+        position: 'top-right',
+        status: 'error',
+        isClosable: true,
+      },
+    },
+    success: {
+      title: 'Email cadastrado com sucesso :D',
+      position: 'top-right',
+      status: 'success',
+      isClosable: true,
+    },
+  };
+  const [subscribers, setSubscribers] = useState([]);
+  const toast = useToast();
+  const [email, setEmail] = useState('');
+
+  function handleSubscribe() {
+    const data = {
+      email,
+    };
+    if (!email) return toast(toasts.erro.invalidEmail);
+    api
+      .post('/setemail', data)
+      .then((response) => {
+        console.log(response);
+        toast(toasts.success);
+      })
+      .catch((error) => {
+        const errorMessage = error.response.data.message;
+
+        if (errorMessage === 'Email já cadastrado!') {
+          toast(toasts.erro.alreadyExists);
+        } else if (errorMessage === 'Email inválido!') {
+          toast(toasts.erro.invalidEmail);
+        } else toast(toasts.erro.error);
+      });
+
+    setEmail('');
+  }
+
+  useEffect(() => {
+    const fetchSubscribers = async () => {
+      try {
+        const response = await api.get('/getemails');
+        setSubscribers(response.data.countEmails);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSubscribers();
+  }, []);
+
   return (
     <Flex
-      // h={{ base: '35rem', md: '50rem' }}
       h={{ base: '93vh', md: '100vh' }}
       align={'center'}
       justify={'center'}
@@ -51,7 +120,7 @@ export const Newsletter = () => {
           Junte-se a nossa turma de
           <Text as="span" fontWeight="bold">
             {' '}
-            8 <Text as="del">miseráveis</Text> estudantes:
+            {subscribers} <Text as="del">miseráveis</Text> estudantes:
           </Text>
         </Text>
         <VStack w="18.75rem">
@@ -60,9 +129,11 @@ export const Newsletter = () => {
               <AiOutlineMail color="gray.300" />
             </InputLeftElement>
             <Input
+              value={email}
               height="46px"
               type="email"
               placeholder="Seu email principal"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </InputGroup>
           <Button
@@ -71,6 +142,7 @@ export const Newsletter = () => {
             height="46px"
             w="100%"
             color={'white'}
+            onClick={handleSubscribe}
           >
             Inscrever-se (É grátis, pobre kk)
           </Button>
