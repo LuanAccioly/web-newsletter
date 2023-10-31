@@ -99,6 +99,7 @@ export const Newsletter = () => {
         align={'center'}
         justify={'center'}
         margin={{ base: '32px 28px', md: '0px 28px' }}
+        paddingBottom="230px"
       >
         <Image
           src={UFRPE_LOGO}
@@ -120,7 +121,7 @@ export const Newsletter = () => {
           Junte-se a nossa turma de
           <Text as="span" fontWeight="bold">
             {' '}
-            {subscribers} <Text as="del">miseráveis</Text> estudantes:
+            {subscribers} inscritos:
           </Text>
         </Text>
         <VStack w="18.75rem">
@@ -144,15 +145,10 @@ export const Newsletter = () => {
             color={'white'}
             onClick={handleSubscribe}
           >
-            Inscrever-se (É grátis, pobre kk)
+            Inscrever-se
           </Button>
         </VStack>
       </Flex>
-      <Box padding="10px" display="flex" alignItems="end" flex="1">
-        <Text textAlign="center" color="gray">
-          Qualquer semelhança com o site do teló é mera coincidência
-        </Text>
-      </Box>
     </Flex>
   );
 };
