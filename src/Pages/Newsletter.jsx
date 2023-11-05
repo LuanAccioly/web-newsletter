@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   Heading,
@@ -55,10 +54,11 @@ export const Newsletter = () => {
     };
     if (!email) return toast(toasts.erro.invalidEmail);
     api
-      .post('/setemail', data)
+      .post('/email/new', data)
       .then((response) => {
-        console.log(response);
         toast(toasts.success);
+        console.log(response.data.message);
+        setEmail('');
       })
       .catch((error) => {
         const errorMessage = error.response.data.message;
@@ -69,14 +69,12 @@ export const Newsletter = () => {
           toast(toasts.erro.invalidEmail);
         } else toast(toasts.erro.error);
       });
-
-    setEmail('');
   }
 
   useEffect(() => {
     const fetchSubscribers = async () => {
       try {
-        const response = await api.get('/getemails');
+        const response = await api.get('/email/count');
         setSubscribers(response.data.countEmails);
       } catch (error) {
         console.log(error);

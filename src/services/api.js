@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8800',
+  baseURL: 'https://api-newsletter-tan.vercel.app/',
 });
 
 export default api;
