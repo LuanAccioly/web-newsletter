@@ -97,7 +97,7 @@ export const Newsletter = () => {
         align={'center'}
         justify={'center'}
         margin={{ base: '32px 28px', md: '0px 28px' }}
-        paddingBottom="230px"
+        paddingBottom="0px"
       >
         <Image
           src={UFRPE_LOGO}
@@ -111,17 +111,13 @@ export const Newsletter = () => {
           textAlign="center"
           size="lg"
         >
-          Notícias da UFRPE para quem não gosta daquele site.
+          Notícias da UFRPE para quem não visita aquele site.
         </Heading>
 
         <Text textAlign="center" marginBottom=".75rem">
-          {' '}
-          Junte-se a nossa turma de
-          <Text as="span" fontWeight="bold">
-            {' '}
-            {subscribers} inscritos:
-          </Text>
+          Junte-se a nossa newsletter!
         </Text>
+
         <VStack w="18.75rem">
           <InputGroup>
             <InputLeftElement height="46px" pointerEvents="none">
@@ -138,6 +134,7 @@ export const Newsletter = () => {
           <Button
             backgroundColor={'rgb(0, 93, 208)'}
             boxShadow={'rgba(0, 97, 219, 0.39) 0px 4px 14px 0px;'}
+            colorScheme='blue'
             height="46px"
             w="100%"
             color={'white'}
@@ -145,6 +142,13 @@ export const Newsletter = () => {
           >
             Inscrever-se
           </Button>
+        <Text color='gray' textAlign="center" marginBottom=".75rem">
+          <Text as="span" fontWeight="bold">
+            {' '}
+            {30 - subscribers} vagas
+          </Text>
+          {' '} restantes
+        </Text>
         </VStack>
       </Flex>
     </Flex>
