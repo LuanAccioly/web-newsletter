@@ -8,24 +8,34 @@ import {
   InputLeftElement,
   Text,
   VStack,
+  useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { AiOutlineMail } from 'react-icons/ai';
 import UFRPE_LOGO from '../assets/images/ufrpe_logo.png';
 import api from '../services/api';
+import { toasts } from '../utils/toasts';
 
 export const Unsubscribe = () => {
   const [email, setEmail] = useState('');
+  const toast = useToast();
 
   function handleUnsubscribe() {
     const data = {
       email,
     };
-    console.log(data);
 
-    api.delete('/email/delete', { data }).then((response) => {
-      console.log(response.data.message);
-    });
+    if (!email) return toast(toasts.erro.invalidEmail);
+    api
+      .delete('/email/delete', { data })
+      .then((response) => {
+        toast(toasts.success.unsubscribed);
+        setEmail('');
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        toast(toasts.erro.error);
+      });
   }
 
   return (
