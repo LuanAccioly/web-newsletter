@@ -21,7 +21,16 @@ export const Newsletter = () => {
   const toast = useToast();
   const [email, setEmail] = useState('');
 
+  function validateEmail(email) {
+    const regexEmail =
+      /^[a-zA-Z]{3,}@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|ufrpe\.br|ufpe\.br)$/;
+
+    return regexEmail.test(email);
+  }
+
   function handleSubscribe() {
+    if (!validateEmail(email)) return toast(toasts.erro.invalidEmail);
+
     const data = {
       email,
     };
