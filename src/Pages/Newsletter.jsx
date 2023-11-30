@@ -14,41 +14,23 @@ import { AiOutlineMail } from 'react-icons/ai';
 import api from '../services/api';
 import { useEffect, useState } from 'react';
 import UFRPE_LOGO from '../assets/images/ufrpe_logo.png';
+import { toasts } from '../utils/toasts';
 
 export const Newsletter = () => {
-  const toasts = {
-    erro: {
-      invalidEmail: {
-        title: 'Email inválido',
-        position: 'top-right',
-        status: 'error',
-        isClosable: true,
-      },
-      alreadyExists: {
-        title: 'Email já cadastrado',
-        position: 'top-right',
-        status: 'error',
-        isClosable: true,
-      },
-      error: {
-        title: 'Erro ao cadastrar email',
-        position: 'top-right',
-        status: 'error',
-        isClosable: true,
-      },
-    },
-    success: {
-      title: 'Email cadastrado com sucesso :D',
-      position: 'top-right',
-      status: 'success',
-      isClosable: true,
-    },
-  };
   const [subscribers, setSubscribers] = useState([]);
   const toast = useToast();
   const [email, setEmail] = useState('');
 
+  function validateEmail(email) {
+    const regexEmail =
+      /^[a-zA-Z]{3,}@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|ufrpe\.br|ufpe\.br)$/;
+
+    return regexEmail.test(email);
+  }
+
   function handleSubscribe() {
+    if (!validateEmail(email)) return toast(toasts.erro.invalidEmail);
+
     const data = {
       email,
     };
@@ -56,7 +38,7 @@ export const Newsletter = () => {
     api
       .post('/email/new', data)
       .then((response) => {
-        toast(toasts.success);
+        toast(toasts.success.subscribed);
         console.log(response.data.message);
         setEmail('');
       })
@@ -134,7 +116,7 @@ export const Newsletter = () => {
           <Button
             backgroundColor={'rgb(0, 93, 208)'}
             boxShadow={'rgba(0, 97, 219, 0.39) 0px 4px 14px 0px;'}
-            colorScheme='blue'
+            colorScheme="blue"
             height="46px"
             w="100%"
             color={'white'}
@@ -142,13 +124,13 @@ export const Newsletter = () => {
           >
             Inscrever-se
           </Button>
-        <Text color='gray' textAlign="center" marginBottom=".75rem">
-          <Text as="span" fontWeight="bold">
-            {' '}
-            {30 - subscribers} vagas
+          <Text color="gray" textAlign="center" marginBottom=".75rem">
+            <Text as="span" fontWeight="bold">
+              {' '}
+              {30 - subscribers} vagas
+            </Text>{' '}
+            restantes
           </Text>
-          {' '} restantes
-        </Text>
         </VStack>
       </Flex>
     </Flex>
