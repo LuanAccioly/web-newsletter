@@ -1,11 +1,13 @@
 import {
   Button,
   Flex,
+  HStack,
   Heading,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
+  Skeleton,
   Text,
   VStack,
   useToast,
@@ -18,6 +20,7 @@ import { toasts } from '../utils/toasts';
 
 export const Newsletter = () => {
   const [subscribers, setSubscribers] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const toast = useToast();
   const [email, setEmail] = useState('');
 
@@ -58,6 +61,7 @@ export const Newsletter = () => {
       try {
         const response = await api.get('/email/count');
         setSubscribers(response.data.countEmails);
+        setIsLoaded(true);
       } catch (error) {
         console.log(error);
       }
@@ -124,13 +128,14 @@ export const Newsletter = () => {
           >
             Inscrever-se
           </Button>
-          <Text color="gray" textAlign="center" marginBottom=".75rem">
-            <Text as="span" fontWeight="bold">
-              {' '}
-              {30 - subscribers} vagas
-            </Text>{' '}
-            restantes
-          </Text>
+
+          <HStack color="gray" textAlign="center" fontWeight={'bold'}>
+            <Text marginBottom=".75rem">
+              <Skeleton isLoaded={isLoaded}>{30 - subscribers}</Skeleton>
+            </Text>
+
+            <Text marginBottom=".75rem">vagas restantes</Text>
+          </HStack>
         </VStack>
       </Flex>
     </Flex>
