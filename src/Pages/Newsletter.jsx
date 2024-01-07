@@ -25,10 +25,8 @@ export const Newsletter = () => {
   const [email, setEmail] = useState('');
 
   function validateEmail(email) {
-    const regexEmail =
-      /^[a-zA-Z]{3,}@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|ufrpe\.br|ufpe\.br)$/;
-
-    return regexEmail.test(email);
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
   }
 
   function handleSubscribe() {
@@ -130,9 +128,9 @@ export const Newsletter = () => {
           </Button>
 
           <HStack color="gray" textAlign="center" fontWeight={'bold'}>
-            <Text marginBottom=".75rem">
-              <Skeleton isLoaded={isLoaded}>{30 - subscribers}</Skeleton>
-            </Text>
+            <Skeleton isLoaded={isLoaded}>
+              <Text marginBottom=".75rem">{30 - subscribers}</Text>
+            </Skeleton>
 
             <Text marginBottom=".75rem">vagas restantes</Text>
           </HStack>
